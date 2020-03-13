@@ -15,12 +15,13 @@ public class Scenario {
             for (int i = 0; i < 3E6; i++) {
                 Vector pa = a.getPosition();
                 Vector pb = b.getPosition();
-                bw.write(pa.getX()+","+pa.getY()+","+pb.getX()+","+pb.getY()+"\n");
+                bw.write(t+","+pa.getX()+","+pa.getY()+","+pb.getX()+","+pb.getY()+"\n");
                 for(PointParticle p : objs)
                 {
                     p.calculateForce(objs);
                     p.move(dt);
                 }
+		t += dt;
             }
             bw.close();
         } catch (Exception e) {
