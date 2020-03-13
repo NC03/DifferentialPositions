@@ -6,6 +6,7 @@ public class PointParticle
     private Vector velocity;
     private Vector force;
     private double mass;
+    private static final double G = 6.673E-11;
 
     public PointParticle(Vector position, Vector velocity, double mass)
     {
@@ -22,7 +23,7 @@ public class PointParticle
             if(p != this)
             {
                 Vector r = Vector.subtract(p.getPosition(),getPosition());
-                Vector f = r.unitVector().scalar(getMass()* p.getMass()/r.magnitude()/r.magnitude());
+                Vector f = r.unitVector().scalar(getMass()* p.getMass()*G/r.magnitude()/r.magnitude());
                 force = force.add(f);
             }
         }
