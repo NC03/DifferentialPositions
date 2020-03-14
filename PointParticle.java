@@ -1,47 +1,43 @@
 import java.util.*;
 
-public class PointParticle
-{
+public class PointParticle {
     private Vector position;
     private Vector velocity;
     private Vector force;
     private double mass;
     private static final double G = 6.673E-11;
 
-    public PointParticle(Vector position, Vector velocity, double mass)
-    {
+    public PointParticle(Vector position, Vector velocity, double mass) {
         this.position = position;
         this.velocity = velocity;
         this.mass = mass;
     }
 
-    public void calculateForce(List<PointParticle> particles)
-    {
-        force = new Vector(0,0);
-        for(PointParticle p : particles)
-        {
-            if(p != this)
-            {
-                Vector r = Vector.subtract(p.getPosition(),getPosition());
-                Vector f = r.unitVector().scalar(getMass()* p.getMass()*G/r.magnitude()/r.magnitude());
+    public void calculateForce(List<PointParticle> particles) {
+        force = new Vector(0, 0);
+        for (PointParticle p : particles) {
+            if (p != this) {
+                Vector r = Vector.subtract(p.getPosition(), getPosition());
+                Vector f = r.unitVector().scalar(getMass() * p.getMass() * G / r.magnitude() / r.magnitude());
                 force = force.add(f);
             }
         }
     }
 
-    public double getMass()
-    {
+    public void addForce(Vector f) {
+        force = force.add(f);
+    }
+
+    public double getMass() {
         return mass;
     }
-    
-    public Vector getPosition()
-    {
+
+    public Vector getPosition() {
         return position;
     }
 
-    public void move(double dt)
-    {
-        Vector acceleration = force.scalar(1/mass);
+    public void move(double dt) {
+        Vector acceleration = force.scalar(1 / mass);
         velocity = velocity.add(acceleration.scalar(dt));
         position = position.add(velocity.scalar(dt));
     }
