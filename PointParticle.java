@@ -5,7 +5,7 @@ public class PointParticle {
     private Vector velocity;
     private Vector force;
     private double mass;
-    private static final double G = 6.673E-11;
+    public static final double G = 6.673E-11;
 
     public PointParticle(Vector position, Vector velocity, double mass) {
         this.position = position;
