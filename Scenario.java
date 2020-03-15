@@ -117,7 +117,7 @@ public class Scenario {
 
     public static String percent(double num){
         String a = ""+(int)(num*100);
-        String b = ""+(int)(num*10000)%100;
+        String b = ""+(int)Math.round(num*10000)%100;
         while (a.length() < 2) {
             a = "0"+a;
         }
