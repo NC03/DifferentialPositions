@@ -73,7 +73,7 @@ public class ImageGenerator {
         Color axes = new Color(0, 0, 0);
 
         try {
-            BufferedImage bi = new BufferedImage(600, 400, BufferedImage.TYPE_INT_RGB);
+            BufferedImage bi = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_RGB);
             String[] d = data.split(",");
             Graphics2D g = (Graphics2D) bi.getGraphics();
             g.setColor(background);
