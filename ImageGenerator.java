@@ -48,7 +48,7 @@ public class ImageGenerator {
                 System.out.println(i + 1 + "/" + lines.size());
                 genImage("genImage/" + format(i, (lines.size() - 1 + "").length()) + ".png", lines.get(i),
                         avgx - width / 2 * 1.2, avgx + width / 2 * 1.2, avgy - height / 2 * 1.2,
-                        avgy + height / 2 * 1.2);
+                        avgy + height / 2 * 1.2, new Color[] { new Color(255, 255, 0), new Color(0, 0, 255), new Color(0, 0, 255), new Color(0, 0, 255), new Color(0, 0, 255) });
             }
 
             br.close();
@@ -59,6 +59,16 @@ public class ImageGenerator {
     }
 
     public static void genImage(String dir, String data, double minx, double maxx, double miny, double maxy) {
+        int len = data.split(",").length / 2;
+        Color[] colors = new Color[len];
+        for (int i = 0; i < len; i++) {
+            colors[i] = new Color(0, 0, 0);
+        }
+        genImage(dir, data, minx, maxx, miny, maxy, colors);
+    }
+
+    public static void genImage(String dir, String data, double minx, double maxx, double miny, double maxy,
+            Color[] colors) {
         Color background = new Color(255, 255, 255);
         Color axes = new Color(0, 0, 0);
 
@@ -69,16 +79,19 @@ public class ImageGenerator {
             g.setColor(background);
             g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
             g.setColor(axes);
-            g.drawLine(0, bi.getHeight() / 2, bi.getWidth(), bi.getHeight() / 2);
-            g.drawLine(bi.getWidth() / 2, 0, bi.getWidth() / 2, bi.getHeight());
-            String time = "t = "+Math.round(Double.parseDouble(d[0]) * 100) / 100.0 + "s";
-            g.drawString(time, bi.getWidth() / 2 -  g.getFontMetrics().stringWidth(time)/2, bi.getHeight() * 8 / 10);
+            g.drawLine(0, (int)linearInterpolation(miny, maxy, bi.getHeight()-1, 0, 0), bi.getWidth(), (int)linearInterpolation(miny, maxy, bi.getHeight()-1, 0, 0));
+            g.drawLine((int)linearInterpolation(minx, maxx, 0,bi.getWidth()-1, 0), 0, (int)linearInterpolation(minx, maxx, 0,bi.getWidth()-1, 0), bi.getHeight());
+            String time = "t = " + Math.round(Double.parseDouble(d[0]) * 100) / 100.0 + "s";
+            g.drawString(time, bi.getWidth() / 2 - g.getFontMetrics().stringWidth(time) / 2, bi.getHeight() * 8 / 10);
             for (int i = 0; i < d.length / 2; i++) {
                 double x = Double.parseDouble(d[2 * i + 1]);
                 double y = Double.parseDouble(d[2 * i + 2]);
                 x = linearInterpolation(minx, maxx, 0, bi.getWidth() - 1, x);
                 y = linearInterpolation(miny, maxy, bi.getHeight() - 1, 0, y);
-                g.fillOval((int) x, (int) y, 10, 20);
+                g.setColor(colors[i]);
+                g.fillOval((int) x - 5, (int) y - 5, 10, 10);
+                g.setColor(new Color(255, 0, 0));
+                g.fillOval((int) x - 2, (int) y - 2, 4, 4);
             }
 
             ImageIO.write(bi, "png", new File(dir));
