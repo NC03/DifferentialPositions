@@ -43,12 +43,23 @@ public class ImageGenerator {
             double height = maxy - miny;
             double avgx = (maxx + minx) / 2;
             double avgy = (maxy + miny) / 2;
+            Color[] colors = new Color[] { new Color(255, 255, 0), new Color(0, 0, 255), new Color(0, 0, 255),
+                    new Color(0, 0, 255), new Color(0, 0, 255) };
+            double[] s = {1988500E24,5.9724E24,2*1988500E24,5.9724E24,5.9724E24};
+            int[] sizes = new int[s.length];
+            double m = max(s);
+            for(int i = 0; i < s.length; i++)
+            {
+                s[i] /= m;
+                s[i] *= Math.min(1920,1080)*0.1;
+                sizes[i] = (int)s[i];
+            }
 
             for (int i = 0; i < lines.size(); i++) {
                 System.out.println(i + 1 + "/" + lines.size());
-                genImage("genImage/" + format(i, (lines.size() - 1 + "").length()) + ".png", lines.get(i),
+                genImage(1920, 1080, "genImage/" + format(i, (lines.size() - 1 + "").length()) + ".png", lines.get(i),
                         avgx - width / 2 * 1.2, avgx + width / 2 * 1.2, avgy - height / 2 * 1.2,
-                        avgy + height / 2 * 1.2, new Color[] { new Color(255, 255, 0), new Color(0, 0, 255), new Color(0, 0, 255), new Color(0, 0, 255), new Color(0, 0, 255) });
+                        avgy + height / 2 * 1.2, colors, sizes);
             }
 
             br.close();
@@ -58,17 +69,22 @@ public class ImageGenerator {
 
     }
 
-    public static void genImage(String dir, String data, double minx, double maxx, double miny, double maxy) {
+    public static void genImage(int width, int height, String dir, String data, double minx, double maxx, double miny,
+            double maxy) {
         int len = data.split(",").length / 2;
+        int[] sizes = new int[len];
         Color[] colors = new Color[len];
         for (int i = 0; i < len; i++) {
             colors[i] = new Color(0, 0, 0);
         }
-        genImage(dir, data, minx, maxx, miny, maxy, colors);
+        for (int i = 0; i < len; i++) {
+            sizes[i] = (int) (0.05 * Math.min(width, height));
+        }
+        genImage(width, height, dir, data, minx, maxx, miny, maxy, colors, sizes);
     }
 
-    public static void genImage(String dir, String data, double minx, double maxx, double miny, double maxy,
-            Color[] colors) {
+    public static void genImage(int width, int height, String dir, String data, double minx, double maxx, double miny,
+            double maxy, Color[] colors, int[] sizes) {
         Color background = new Color(255, 255, 255);
         Color axes = new Color(0, 0, 0);
 
@@ -79,8 +95,10 @@ public class ImageGenerator {
             g.setColor(background);
             g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
             g.setColor(axes);
-            g.drawLine(0, (int)linearInterpolation(miny, maxy, bi.getHeight()-1, 0, 0), bi.getWidth(), (int)linearInterpolation(miny, maxy, bi.getHeight()-1, 0, 0));
-            g.drawLine((int)linearInterpolation(minx, maxx, 0,bi.getWidth()-1, 0), 0, (int)linearInterpolation(minx, maxx, 0,bi.getWidth()-1, 0), bi.getHeight());
+            g.drawLine(0, (int) linearInterpolation(miny, maxy, bi.getHeight() - 1, 0, 0), bi.getWidth(),
+                    (int) linearInterpolation(miny, maxy, bi.getHeight() - 1, 0, 0));
+            g.drawLine((int) linearInterpolation(minx, maxx, 0, bi.getWidth() - 1, 0), 0,
+                    (int) linearInterpolation(minx, maxx, 0, bi.getWidth() - 1, 0), bi.getHeight());
             String time = "t = " + Math.round(Double.parseDouble(d[0]) * 100) / 100.0 + "s";
             g.drawString(time, bi.getWidth() / 2 - g.getFontMetrics().stringWidth(time) / 2, bi.getHeight() * 8 / 10);
             for (int i = 0; i < d.length / 2; i++) {
@@ -89,9 +107,9 @@ public class ImageGenerator {
                 x = linearInterpolation(minx, maxx, 0, bi.getWidth() - 1, x);
                 y = linearInterpolation(miny, maxy, bi.getHeight() - 1, 0, y);
                 g.setColor(colors[i]);
-                g.fillOval((int) x - 5, (int) y - 5, 10, 10);
-                g.setColor(new Color(255, 0, 0));
-                g.fillOval((int) x - 2, (int) y - 2, 4, 4);
+                int s = sizes[i];
+                s = Math.max(s,10);
+                g.fillOval((int) x - s / 2, (int) y - s / 2, s, s);
             }
 
             ImageIO.write(bi, "png", new File(dir));
@@ -110,6 +128,16 @@ public class ImageGenerator {
             out = "0" + out;
         }
         return out;
+    }
+
+    public static double max(double[] arr)
+    {
+        double max = arr[0];
+        for(double e : arr)
+        {
+            max = Math.max(e,max);
+        }
+        return max;
     }
 
 }

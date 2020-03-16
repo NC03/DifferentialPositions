@@ -70,9 +70,51 @@ public class Scenario {
         // } catch (Exception e) {
         // // TODO: handle exception
         // }
+        // PointParticle sun = new PointParticle(new Vector(0, 0), new Vector(0, 0), 1988500E24);
+        // PointParticle e1 = new PointParticle(new Vector(149.6E9, 0), new Vector(0, 29782.254), 5.9724E24);
+        // PointParticle e2 = new PointParticle(new Vector(0, 149.6E9), new Vector(-29782.254, 0), 5.9724E24);
+        // PointParticle e3 = new PointParticle(new Vector(-149.6E9, 0), new Vector(0, -29782.254), 5.9724E24);
+        // PointParticle e4 = new PointParticle(new Vector(0, -149.6E9), new Vector(29782.254, 0), 5.9724E24);
+
+        // List<PointParticle> objs = new ArrayList<PointParticle>();
+        // objs.add(sun);
+        // objs.add(e1);
+        // objs.add(e2);
+        // objs.add(e3);
+        // objs.add(e4);
+        // double t = 0;
+        // double dt = 1 / 30.0;
+        // double duration = 31557600;
+        // int maxDataPoints = 500;
+        // try {
+        //     BufferedWriter bw = new BufferedWriter(new FileWriter(new File("out.txt")));
+
+        //     for (int i = 0; i < (int) (duration / dt); i++) {
+        //         if (i % ((int) (duration / dt) / maxDataPoints) == 0) {
+        //             bw.write(t + "," + sun.getPosition().getX() + "," + sun.getPosition().getY() + ","
+        //                     + e1.getPosition().getX() + "," + e1.getPosition().getY() + "," + e2.getPosition().getX()
+        //                     + "," + e2.getPosition().getY() + "," + e3.getPosition().getX() + ","
+        //                     + e3.getPosition().getY() + "," + e4.getPosition().getX() + "," + e4.getPosition().getY()
+        //                     + "\n");
+        //             double percent = i * dt / duration;
+        //             int width = 16;
+        //             int len = (int) (width * percent);
+        //             System.out.print(percent(percent) + "\t[" + rep("#", len) + rep(".", 16 - len)
+        //                     + "]                        \r");
+        //         }
+        //         for (PointParticle p : objs) {
+        //             p.calculateForce(objs);
+        //             p.move(dt);
+        //         }
+        //         t += dt;
+        //     }
+        //     bw.close();
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
         PointParticle sun = new PointParticle(new Vector(0, 0), new Vector(0, 0), 1988500E24);
         PointParticle e1 = new PointParticle(new Vector(149.6E9, 0), new Vector(0, 29782.254), 5.9724E24);
-        PointParticle e2 = new PointParticle(new Vector(0, 149.6E9), new Vector(-29782.254, 0), 5.9724E24);
+        PointParticle e2 = new PointParticle(new Vector(0, 149.6E9), new Vector(-29782.254, 0), 2*1988500E24);
         PointParticle e3 = new PointParticle(new Vector(-149.6E9, 0), new Vector(0, -29782.254), 5.9724E24);
         PointParticle e4 = new PointParticle(new Vector(0, -149.6E9), new Vector(29782.254, 0), 5.9724E24);
 
